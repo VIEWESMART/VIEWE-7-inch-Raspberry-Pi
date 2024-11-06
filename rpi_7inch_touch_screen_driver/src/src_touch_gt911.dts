@@ -1,0 +1,46 @@
+/dts-v1/; 
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <0xffffffff>;
+		phandle = <0x02>;
+
+		__overlay__ {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+			status = "okay";
+
+			DSI_Touch@5d {
+				compatible = "goodix,gt911";
+				reg = <0x5d>;
+				phandle = <0x01>;
+				touchscreen-size-x = <0x320>;
+				touchscreen-size-y = <0x1e0>;
+			};
+		};
+	};
+
+	__overrides__ {
+		invertedx = [00 00 00 01 74 6f 75 63 68 73 63 72 65 65 6e 2d 69 6e 76 65 72 74 65 64 2d 78 00];
+		invertedy = [00 00 00 01 74 6f 75 63 68 73 63 72 65 65 6e 2d 69 6e 76 65 72 74 65 64 2d 79 00];
+		swappedxy = <0x01 0x746f7563 0x68736372 0x65656e2d 0x73776170 0x7065642d 0x782d7900>;
+		I2C_bus = [00 00 00 02 74 61 72 67 65 74 3a 30 7b 34 3d 00 ff ff ff ff 31 30 3d 00 ff ff ff ff 31 3d 00 ff ff ff ff 7d 00];
+	};
+
+	__fixups__ {
+		i2c_csi_dsi = "/fragment@0:target:0\0/__overrides__:I2C_bus:10\0/__overrides__:I2C_bus:24";
+		i2c1 = "/__overrides__:I2C_bus:31";
+	};
+
+	__local_fixups__ {
+
+		__overrides__ {
+			invertedx = <0x00>;
+			invertedy = <0x00>;
+			swappedxy = <0x00>;
+			I2C_bus = <0x0a>;
+		};
+	};
+};
